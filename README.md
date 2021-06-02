@@ -1,7 +1,7 @@
 Flask-HoneyAuth
 ==============
 
-A modified version of Flask-HTTPAuth that adds support for a "honeylayer" - an integrated honeypot -  by separately authenticating honey tokens and applying separate code to routes accessed using those honey tokens.
+A modified version of [Flask-HTTPAuth](https://github.com/miguelgrinberg/Flask-HTTPAuth) that adds support for  separately authenticating honey tokens and applying separate code to routes visited by clients using those honey tokens. Flask-HTTPAuth is buil
 
 Installation
 ------------
@@ -10,7 +10,6 @@ The easiest way to install this is through pip.
 pip install Flask-HoneyAuth
 ```
 
-Basic authentication example
 ----------------------------
 
 ```python
@@ -73,6 +72,3 @@ def index():
 if __name__ == '__main__':
     app.run()
 ```
-
-Resources
----------
