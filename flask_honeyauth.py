@@ -16,7 +16,7 @@ from flask import request, make_response, session, g, Response
 from werkzeug.datastructures import Authorization
 
 
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 
 
 class HTTPAuth(object):
@@ -175,6 +175,7 @@ class HTTPAuth(object):
                         if honey is not None and honey_user is not False:
                             # if it is, set the username attribute and return the honey route instead of the normal logic
                             g.flask_httpauth_user = honey_user
+                            session['honey'] = True
                             return honey(*args, **kwargs)
 
                     elif not self.authorize(role, user, auth):
@@ -189,6 +190,9 @@ class HTTPAuth(object):
 
                     g.flask_httpauth_user = user if user is not True \
                                     else auth.username if auth else None
+
+                    # set honeyflag down in session
+                    session['honey'] = False
                 return f(*args, **kwargs)
             return decorated
 

@@ -1,6 +1,6 @@
 import unittest
 import base64
-from flask import Flask, g
+from flask import Flask, g, session
 from flask_honeyauth import HTTPBasicAuth
 
 class HTTPAuthTestCase(unittest.TestCase):
@@ -68,6 +68,14 @@ class HTTPAuthTestCase(unittest.TestCase):
         self.basic_verify_auth = basic_verify_auth
         self.client = app.test_client()
 
+        def honeyflag():
+            return str(session['honey'])
+
+        @app.route('/honeyflag')
+        @basic_verify_auth.login_required(honey=honeyflag)
+        def honeyflag_route():
+            return str(session['honey'])
+
     def test_honey_auth_login_valid(self):
         creds = base64.b64encode(b'susan:bye').decode('utf-8')
         response = self.client.get(
@@ -89,6 +97,7 @@ class HTTPAuthTestCase(unittest.TestCase):
         creds = base64.b64encode(b'h:bee').decode('utf-8')
         response = self.client.get(
                 '/basic-verify', headers={'Authorization': 'Basic ' + creds})
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, b'basic_verify_auth: honey user: h')
 
     def test_honey_auth_honey_login_invalid(self):
@@ -97,6 +106,18 @@ class HTTPAuthTestCase(unittest.TestCase):
                 '/basic-verify', headers={'Authorization': 'Basic ' + creds})
         self.assertEqual(response.status_code, 403)
         self.assertTrue('WWW-Authenticate' in response.headers)
+
+    def test_honey_auth_flask_honeyflag_down(self):
+        creds = base64.b64encode(b'susan:bye').decode('utf-8')
+        response = self.client.get(
+                '/honeyflag', headers={'Authorization': 'Basic ' + creds})
+        self.assertEquals(response.data, b'False')
+
+    def test_honey_auth_flask_honeyflag_up(self):
+        creds = base64.b64encode(b'h:bee').decode('utf-8')
+        response = self.client.get(
+                '/honeyflag', headers={'Authorization': 'Basic ' + creds})
+        self.assertEquals(response.data, b'True')
 
 class HTTPAuthTestCaseOldStyle(HTTPAuthTestCase):
     use_old_style_callback = True

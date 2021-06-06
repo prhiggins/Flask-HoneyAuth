@@ -33,9 +33,9 @@ def verify_password(username, password):
 
 
 @auth.check_honeytoken
-def check_honeytoken(username, password):
-	if username in honey_users and check_password_hash(honey_users.get(username), password):
-		return username
+def check_honeytoken(auth):
+	if auth.username in honey_users and check_password_hash(honey_users.get(username), auth.password):
+		return auth.username
 	else:
 		return False
 
