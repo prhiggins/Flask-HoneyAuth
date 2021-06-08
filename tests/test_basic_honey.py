@@ -111,13 +111,13 @@ class HTTPAuthTestCase(unittest.TestCase):
         creds = base64.b64encode(b'susan:bye').decode('utf-8')
         response = self.client.get(
                 '/honeyflag', headers={'Authorization': 'Basic ' + creds})
-        self.assertEquals(response.data, b'False')
+        self.assertEqual(response.data, b'False')
 
     def test_honey_auth_flask_honeyflag_up(self):
         creds = base64.b64encode(b'h:bee').decode('utf-8')
         response = self.client.get(
                 '/honeyflag', headers={'Authorization': 'Basic ' + creds})
-        self.assertEquals(response.data, b'True')
+        self.assertEqual(response.data, b'True')
 
 class HTTPAuthTestCaseOldStyle(HTTPAuthTestCase):
     use_old_style_callback = True

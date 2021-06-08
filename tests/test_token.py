@@ -29,20 +29,24 @@ class HTTPAuthTestCase(unittest.TestCase):
 
         @token_auth.check_honeytoken
         def verify_honeytoken(auth):
-            if not auth or not auth.username:
+            if not auth or not auth['token']:
                 return False
-            elif auth.username == "h" and password == "bee":
-                return True
+            elif auth['token'] == 'this-is-the-honeytoken':
+                return 'honey'
             return False
 
         token_auth2.check_honey_callback = verify_honeytoken
         token_auth3.check_honey_callback = verify_honeytoken
+
+        def honeyroute():
+            return 'token_auth honey:' + token_auth.current_user()
+
         @app.route('/')
         def index():
             return 'index'
 
         @app.route('/protected')
-        @token_auth.login_required
+        @token_auth.login_required(honey=honeyroute)
         def token_auth_route():
             return 'token_auth:' + token_auth.current_user()
 
@@ -82,6 +86,12 @@ class HTTPAuthTestCase(unittest.TestCase):
                 '/protected', headers={'Authorization':
                                                            'MyToken this-is-the-token!'})
         self.assertEqual(response.data.decode('utf-8'), 'token_auth:user')
+
+    def test_token_auth_login_valid(self):
+        response = self.client.get(
+                        '/protected', headers={'Authorization':
+                                                        	'MyToken this-is-the-honeytoken'})
+        self.assertEqual(response.data.decode('utf-8'), 'token_auth honey:honey')
 
     def test_token_auth_login_valid_different_case(self):
         response = self.client.get(
