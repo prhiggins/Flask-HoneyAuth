@@ -10,6 +10,17 @@ The easiest way to install this is through pip.
 pip install Flask-HoneyAuth
 ```
 
+Build Instructions
+------------
+To build and test the package using docker, first clone the repository:
+```
+git clone https://github.com/prhiggins/flask-honeyauth
+```
+Then simply build and run the image using the provided Dockerfile:
+```
+docker build . -t flask-honeyauth && docker run flask-honeyauth
+```
+
 Basic authentication example
 ----------------------------
 
@@ -52,3 +63,7 @@ if __name__ == '__main__':
 Note: See the [Flask-HTTPAuth documentation](http://pythonhosted.org/Flask-HTTPAuth) for more complex examples that involve password hashing, custom verification callbacks, and digest and token authentication.
 
 See the [honeybank](http://github.com/prhiggins/honeybank) for more detailed honeypot usage examples.
+
+Author
+----------------------------
+Patrick Higgins (phiggin5@uoregon.edu)
