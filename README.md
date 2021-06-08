@@ -1,7 +1,7 @@
 Flask-HoneyAuth
 ==============
 
-A modified version of [Flask-HTTPAuth](https://github.com/miguelgrinberg/Flask-HTTPAuth) that adds support for  separately authenticating honey tokens and applying separate code to routes visited by clients using those honey tokens. Flask-HTTPAuth is buil
+A modified version of [Flask-HTTPAuth](https://github.com/miguelgrinberg/Flask-HTTPAuth) that adds support for  separately authenticating honey tokens and applying separate code to routes visited by clients using those honey tokens.
 
 Installation
 ------------
@@ -10,6 +10,7 @@ The easiest way to install this is through pip.
 pip install Flask-HoneyAuth
 ```
 
+Basic authentication example
 ----------------------------
 
 ```python
@@ -25,6 +26,14 @@ users = {
     "susan": generate_password_hash("bye")
 }
 
+honey_users = {
+        "dave": generate_password_hash("hey"),
+        "alice": generate_password_hash("asdfghj"),
+}
+
+def honeyroute():
+	return "Hello, %s, welcome to the honey universe!" % auth.current_user()
+
 @auth.verify_password
 def verify_password(username, password):
     if username in users and \
@@ -32,7 +41,7 @@ def verify_password(username, password):
         return username
 
 @app.route('/')
-@auth.login_required
+@auth.login_required(honey=honeyroute)
 def index():
     return "Hello, %s!" % auth.current_user()
 
@@ -40,35 +49,6 @@ if __name__ == '__main__':
     app.run()
 ```
 
-Note: See the [Flask-HTTPAuth documentation](http://pythonhosted.org/Flask-HTTPAuth) for more complex examples that involve password hashing and custom verification callbacks.
+Note: See the [Flask-HTTPAuth documentation](http://pythonhosted.org/Flask-HTTPAuth) for more complex examples that involve password hashing, custom verification callbacks, and digest and token authentication.
 
-Digest authentication example
------------------------------
-
-```python
-from flask import Flask
-from flask_honeyauth import HTTPDigestAuth
-
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret key here'
-auth = HTTPDigestAuth()
-
-users = {
-    "john": "hello",
-    "susan": "bye"
-}
-
-@auth.get_password
-def get_pw(username):
-    if username in users:
-        return users.get(username)
-    return None
-
-@app.route('/')
-@auth.login_required
-def index():
-    return "Hello, %s!" % auth.username()
-
-if __name__ == '__main__':
-    app.run()
-```
+See the [honeybank](http://github.com/prhiggins/honeybank) for more detailed honeypot usage examples.
