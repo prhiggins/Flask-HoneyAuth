@@ -14,7 +14,7 @@ Build Instructions
 ------------
 To build and test the package using docker, first clone the repository:
 ```
-git clone https://github.com/prhiggins/flask-honeyauth
+git clone https://github.com/prhiggins/Flask-HoneyAuth.git
 ```
 Then simply build and run the image using the provided Dockerfile:
 ```
