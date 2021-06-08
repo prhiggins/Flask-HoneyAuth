@@ -1,4 +1,12 @@
 """
+flask_honeyauth
+==================
+
+This module provides Basic, Digest and Token HTTP authentication for Flask routes, with honeyrouting capabilities.
+
+:copyright: (C) 2021 by Patrick Higgins.
+:license:   MIT, see LICENSE for more details.
+
 flask_httpauth
 ==================
 
